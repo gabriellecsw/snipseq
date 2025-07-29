@@ -8,4 +8,4 @@
 
 # Snipseq is broken down into two pipelines, snipseqMatch and snipseqAssign. Please see the links below for detailed documentation:
 - SnipseqMatch: Generation of Oligo-Barcode Library, the input file for snipseqAssign.
-- SnipseqAssign: Demultiplexing and target sequence retrieval.
+- [SnipseqAssign](https://github.com/gabriellecsw/snipseq/tree/main/snipseqAssign): Demultiplexing and target sequence retrieval.
