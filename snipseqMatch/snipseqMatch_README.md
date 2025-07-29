@@ -1,5 +1,11 @@
 # SnipseqMatch
 ## Pipeline Flowchart
+![snipseqMatch_pipeline_flowchart](snipseqMatch_pipeline_flowchart.png)
+
+- **Green** objects represent files and information provided to the pipeline, which are directly passed to a script or program.
+- **Blue** objects represent calls to the modules mentioned above.
+- **Yellow** objects denote scripts specifically designed for the pipeline.
+- **Pink** objects represents the output from this pipeline.
 
 ### Pipeline Description
 - The process begins with either raw sequencing files or fastq files as input. 
