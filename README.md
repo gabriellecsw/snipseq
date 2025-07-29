@@ -6,8 +6,6 @@
 - Cost-Efficiency: Enables multiplexing of replicates and conditions, allowing pooled sequencing of multiple samples in one run. Users are able to then link each read to its experimental condition via barcode mapping.
 - Standard input files: Accepts fastq files or raw sequencing files as input.
 
-# Limitations
-
 # Snipseq is broken down into two pipelines, snipseqMatch and snipseqAssign. Please see the links below for detailed documentation:
 - SnipseqMatch: Generation of Oligo-Barcode Library, the input file for snipseqAssign.
 - SnipseqAssign: Demultiplexing and target sequence retrieval.
