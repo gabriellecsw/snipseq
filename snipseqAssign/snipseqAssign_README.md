@@ -1,53 +1,53 @@
 # SnipseqAssign
+## Overview Flowchart
+## Pipeline Description
+- snipseqAssign only demultiplex reads. Please see snipseqMatch if you wish to only retrieve sequences/target/region of interest within your reads or snipseqCore if you wish to carry out both demultiplexing and sequence retrieval. 
+- Users are required to prepare the following files to run snipseqAssign:
+    - snipseq_assign_metadata.csv: A file containing the barcodes or barcode pairs.
 
-## Reference Diagram 
+## Input options for ```snipseq assign run```
+Basic usage: ```snipseq assign run -i <olb.txt.gz file> -m <metadata file> -sp <spacing between front and rear barcode> -pad <spacing before front barcode>```
 
-A double-ended barcode with different flanks and barcode sequences for front and rear barcodes is described here.
+| Argument     | Alias  | Description                                                                        | Required |
+| ------------ | ------ | ---------------------------------------------------------------------------------- | -------- |
+| `--input`    | `-i`   | Path to input file.                                                                | Yes      |
+| `--metadata` | `-m`   | Path to metadata CSV file with barcode pairs.                                      | Yes      |
+| `--space`    | `-sp`  | Fixed number or range of bases between front and rear barcodes (e.g. 30,68 or 30). | Yes      |
+| `--padding`  | `-pad` | Fixed number or range of bases before the front barcode (e.g. 30,68 or 30).        | Yes      |
 
-> 5′--- padding --- front_barcode--- trail_frt --- UMI_fwd --- fwd_primer --- target_flank1 --- target --- target_flank2 --- rev_primer --- UMI_rev --- trail_rev --- rear_barcode ---3′ 
+## Outputs from ```snipseq assign run```
+Users will have a 'main' and 'counts' csv files saved as ```snipseq_assign.csv``` and ```snipseq_assign_counts.csv```. Below are the description of each column for each csv file:
+### Main output file
+| Column Name         | Description                                      |
+| ------------------- | ------------------------------------------------ |
+| reads               | The read id.                                     |
+| seq                 | The sequences of the read.                       |
+| space               | The sequence between the front and rear barcode. |
+| padding             | The sequence before the front barcode.           |
+| front_barcode       | The sequence of the front barcode.               |
+| rear_barcode        | The sequence of the rear barcode.                |
+| pair                | The pair that each read has been assigned to.    |
+| front_barcode_name  | The name of the front barcode.                   |
+| rear_barcode_name   | The name of the rear barcode.                    |
 
-## Reads Arrangement Options
+### Counts output file
+| Column Name         | Description                                      |
+| ------------------  | ------------------------------------------------ |
+| pair                | The pair that each read has been assigned to.    |
+| front_barcode_name  | The name of the front barcode.                   |
+| rear_barcode_name   | The name of the rear barcode.                    |
+| counts              | The total number of reads for each pair.         |
 
-The table below describes the arrangement options in more detail. Users are free to add or drop the options according to their experimental design and what they want to extract from the sequencing data. For each option, users can specify either the exact sequence, single postition, or a range of position to match.
-
-| Option        | Description                                                                                                                       |
-| ------------- | --------------------------------------------------------------------------------------------------------------------------------- |
-| padding       | The region upstream of the front custom barcode.                                                                                  |
-| front_barcode | The front custom barcode.                                                                                                         |
-| trail_frt     | The trailing flank of the front custom barcode.                                                                                   |
-| UMI_fwd       | The length of the UMI used in the forward primer.                                                                                 |
-| fwd_primer    | The sequence or length of the forward primer.                                                                                     |
-| target_flank1 | The region between the forward primer and the target.                                                                             |
-| target        | The region of interest/ variation. To extract the sequences of the variable region, use the length of the sequence as input.      |
-| target_flank2 | The region between the target and the reverse primer.                                                                             |
-| rev_primer    | The sequence or length of the forward primer. If using sequences, please use the reverse complement of the reverse primer.        |
-| UMI_rev       | The length of the UMI used in the reverse primer.                                                                                 |
-| trail_rev     | The trailing flank of the rear custom barcode. If using sequences, please use the reverse complement of the rear custom barcode.  |
-| rear_barcode  | The rear custom barcode. If using sequences, please use the reverse complement of the rear custom barcode.                        |
-
-## Example Usage
-In this example, the target is 'NTCATGNN'. By leveraging the flexibility of snipseq, we split the ```target``` into 3 parts, ``` up_v ```, ```cons_v``` and ``` down_v ```.
-
-```
-pair11_e1 = r"""(?x)
-(?P<padding>.{30,68})
-(?P<front_barcode>TTCTAGCT){e<=1}
-(?P<trail_frt>TCGTCGGCAGCGTCAGATGTGTATAAGAGACAG){e<=1}
-(?P<UMI_fwd>.{2})
-(?P<fwd_primer>GTGTTCACTAGCAACCTCAAAC){e<=1}
-(?P<target_flank1>ATTC){e<=1}
-(?P<up_v>.{1})
-(?P<cons_v>TCATG){e<=1}
-(?P<down_v>.{2})
-(?P<target_flank2>.{575,585})
-(?P<rev_primer>GAGAGAGTCACCACATACGAAG){e<=1}
-(?P<UMI_rev>.{2})
-(?P<trail_rev>CTGTCTCTTATACACATCTCCGAGCCCACGAGAC){e<=1}
-(?P<rear_barcode>ATCTCAGG){e<=1}
-"""
+## An example usage of snipseqAssign with paired barcodes
+> snipseq assign run -i mut_lib_duplex_mapped.txt.gz -sp 701,711 -pad 38,65 -m snipseq_assign_metadata.csv
+### In this example, snipseq will start finding the front barcode 38 to 65 bases after the start of the read and look for the rear barcode at 739 to 776 bases after the start of the read.
+### An example of a ```snipseq_assign_metadata.csv``` file with paired barcodes separated by comma. The sequences should be specified in a 5'to 3' manner. 
 
 ```
-## Description for the options in the example usage:
-- Assigning an exact sequence           ```(?P<front_barcode>TTCTAGCT){e<=1}``` : Find these sequences in the read after ```padding``` by allowing up to one mismatch and assign them as the ```front_barcode```.
-- Assigning a range of positions        ```(?P<padding>.{30,68})```             : Assign sequences from the start of the read up to 30bp or 68bp as ```padding```.
-- Assigning a fixed number of positions ```(?P<UMI_fwd>.{2})```                 : Assign 2 bases after ```trail_frt``` as ```UMI_fwd```.
+pair,front_barcode_name,front_barcode,rear_barcode_name,rear_barcode
+pair11,S515_F,TTCTAGCT,N710_R,CAGCCTCG
+pair12,S520_F,AAGGCTAT,N715_R,CCTGAGAT
+pair13,S520_F,AAGGCTAT,N710_R,CAGCCTCG
+pair14,S515_F,TTCTAGCT,N715_R,CCTGAGAT
+```
+- In this example, snipseq assign will first get the reverse complement sequence for both front and rear barcodes. Next, reads with 'TTCTAGCT' and 'CGAGGCTG' (reverse complement of 'CAGCCTCG') will be assigned as pair11. This process will be repeated for each pair.
