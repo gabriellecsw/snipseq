@@ -1,19 +1,17 @@
 # SnipseqAssign
 ## Overview Flowchart
 ## Pipeline Description
-- snipseqAssign only demultiplex reads. Please see snipseqMatch if you wish to only retrieve sequences/target/region of interest within your reads or snipseqCore if you wish to carry out both demultiplexing and sequence retrieval. 
+- snipseqAssign carries out demultiplexing.
 - Users are required to prepare the following files to run snipseqAssign:
-    - snipseq_assign_metadata.csv: A file containing the barcodes or barcode pairs.
+    - snipseq_assign_metadata.csv: A file containing the barcodes or barcode pairs separated by comma and the sequences should be specified in a 5' to 3' manner.
 
 ## Input options for ```snipseq assign run```
-Basic usage: ```snipseq assign run -i <olb.txt.gz file> -m <metadata file> -sp <spacing between front and rear barcode> -pad <spacing before front barcode>```
+Basic usage: ```snipseq assign run -i <fastq.gz file> -m <metadata file> ```
 
 | Argument     | Alias  | Description                                                                        | Required |
 | ------------ | ------ | ---------------------------------------------------------------------------------- | -------- |
 | `--input`    | `-i`   | Path to input file.                                                                | Yes      |
-| `--metadata` | `-m`   | Path to metadata CSV file with barcode pairs.                                      | Yes      |
-| `--space`    | `-sp`  | Fixed number or range of bases between front and rear barcodes (e.g. 30,68 or 30). | Yes      |
-| `--padding`  | `-pad` | Fixed number or range of bases before the front barcode (e.g. 30,68 or 30).        | Yes      |
+| `--metadata` | `-m`   | Path to metadata CSV file with barcodes or barcode pairs.                          | Yes      |
 
 ## Outputs from ```snipseq assign run```
 Users will have a 'main' and 'counts' csv files saved as ```snipseq_assign.csv``` and ```snipseq_assign_counts.csv```. Below are the description of each column for each csv file:
@@ -39,9 +37,8 @@ Users will have a 'main' and 'counts' csv files saved as ```snipseq_assign.csv``
 | counts              | The total number of reads for each pair.         |
 
 ## An example usage of snipseqAssign with paired barcodes
-> snipseq assign run -i mut_lib_duplex_mapped.txt.gz -sp 701,711 -pad 38,65 -m snipseq_assign_metadata.csv
-### In this example, snipseq will start finding the front barcode 38 to 65 bases after the start of the read and look for the rear barcode at 739 to 776 bases after the start of the read.
-### An example of a ```snipseq_assign_metadata.csv``` file with paired barcodes separated by comma. The sequences should be specified in a 5'to 3' manner. 
+> snipseq assign run -i mut_lib_duplex_mapped.txt.gz -m snipseq_assign_metadata.csv
+### An example of a ```snipseq_assign_metadata.csv``` file with paired barcodes.
 
 ```
 pair,front_barcode_name,front_barcode,rear_barcode_name,rear_barcode
