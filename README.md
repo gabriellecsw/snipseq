@@ -15,28 +15,42 @@ Snipseq is designed to remain accessible even to users with limited bioinformati
 ```r
 git clone https://github.com/gabriellecsw/snipseq.git
 cd snipseq
+pip install .
 ```
 
+## INPUT FILES
+To support a wide range of sequencing platforms, `Snipseq` currently accepts raw sequencing reads generated from Nanopore (long-read) and Illumina (short-read) technologies.
+
+For Illumina raw read files, `Snipseq` expects a `fastq` input file. It extracts the read identifiers and sequences and organises them into a dataframe for downstream processing.
+
+For Nanopore raw read files, `Snipseq` expects a `pod5` input file. It will first perform basecalling using either `simplex` or `duplex` mode from the `Dorado` package, depending on the user’s specification, followed by extraction of read identifiers and sequences.
+
+
 ## HOW TO START
-To accommodate different experimental designs and analysis goals, Snipseq provides two operating modes: `basic` mode and `advanced` mode. 
+To accommodate different experimental designs and analysis goals, Snipseq provides two operating modes: `basic` mode and `advanced` mode.
+
 Both modes support demultiplexing and sequence retrieval, allowing users to choose the level of complexity appropriate for their experiment.
 
 ![modes](figures/snipseq_basic_adv.png)
 
 ### Basic mode
-The `basic` mode is designed for simple experimental setups involving a single feature of interest. In this mode, users may perform demultiplexing alone or demultiplexing with feature sequence retrieval using the `-ret` argument (`False` for demultiplexing only and `True` to demultiplex and retrieve the feature sequence). 
+The `basic` mode is designed for simple experimental setups involving a single feature of interest.
+
+In this mode, users may perform demultiplexing alone or demultiplexing with feature sequence retrieval using the `-ret` argument (`False` for demultiplexing only and `True` to demultiplex and retrieve the feature sequence). 
 
 #### Demultiplex only
-Below is an example to run snipseq on the basic mode with `ret False`:
+Below is the example to run snipseq on the basic mode with `ret False`:
 
 ```r
 snipseq 
--i SRR30861029_2_ss.txt.gz # Your sample file that requires demultiplexing.
+-i SRR30861029_2.fastq.gz # Your sample file that requires demultiplexing.
 -m metadata_ime.csv # A metadata file containing your paired barcode sequences.
 -s illumina # The sequencing platform used.
 -ret False # Whether to retrieve sequence of interest. The default is False, if True, please refer to next subsection of the basic mode for more information.
 -o SRR30861029_2_ss_assign_ret.csv # Your output directory.
 ```
+
+Note: If the sequencing type is `nanopore`, the `read_type` parameter must be specified. Users can choose either `simplex` or `duplex`.
 
 #### Demultiplex and retrieve sequence of interest
 When running the basic mode with `-ret True`, there are several options to choose from depending on the postion of your sequence of interest:
@@ -48,7 +62,7 @@ Below is an example to run snipseq on the basic mode with `ret True`:
 
 ```r
 snipseq 
--i SRR30861029_2_ss.txt.gz # Your sample file that requires demultiplexing.
+-i SRR30861029_2.fastq.gz # Your sample file that requires demultiplexing.
 -m metadata_ime.csv # A metadata file containing your paired barcode sequences.
 -s illumina # The sequencing platform used.
 -ret True # Whether to retrieve sequence of interest.
@@ -59,7 +73,8 @@ snipseq
 ```
 
 ### Advance mode
-The `advanced` mode is intended for more complex experiments involving multiple features or more elaborate read architectures. 
+The `advanced` mode is intended for more complex experiments involving multiple features or more elaborate read architectures.
+
 In this mode, `Snipseq` automatically performs both demultiplexing and sequence retrieval.
 
 #### Preparing the `.toml` arrangement file
@@ -67,9 +82,14 @@ This `.toml` arrangement file contains the arrangement of specific fewith the re
 
 ```r
 snipseq 
--i SRR30861029_2_ss.txt.gz # Your sample file that requires demultiplexing
+-i SRR30861029_2.fastq.gz # Your sample file that requires demultiplexing
 -a arrangement.toml # A .toml file containing the arrangement of features you would like to extract
 -s illumina # The sequencing platform used.
 -o SRR30861029_2_ss_assign_ret.csv # Output directory
 ```
-#### Input files
+
+## OUTPUTS
+Snipseq generates three primary output files:
+- The `main_output.csv` file contains the read identifiers and their corresponding barcode assignments.
+- The `counts_summary.csv` file summarises the number of reads assigned to each barcode pair, allowing users to quickly evaluate barcode distribution.
+- The `log_summary.csv` file records run statistics, including runtime information and the number of assigned and unassigned reads. # will be available soon.

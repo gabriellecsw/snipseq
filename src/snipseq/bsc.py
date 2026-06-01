@@ -62,19 +62,19 @@ def bsc(
 
         if read_type == "simplex":
 
-            # log('Running Dorado basecalling in simplex mode...')
-            # subprocess.run(f"dorado basecaller hac {input_path} > simplex.bam", shell=True, check=True)
-            # subprocess.run("samtools view -F2304 simplex.bam | "
-            #                "awk '{print $1 \"\\t\" $10}' | "
-            #                "gzip > simplex.txt.gz", shell=True, check=True)
+            log('Running Dorado basecalling in simplex mode...')
+            subprocess.run(f"dorado basecaller hac {input_path} > simplex.bam", shell=True, check=True)
+            subprocess.run("samtools view -F2304 simplex.bam | "
+                           "awk '{print $1 \"\\t\" $10}' | "
+                           "gzip > simplex.txt.gz", shell=True, check=True)
 
-            # df_sample = pd.read_csv("simplex.txt.gz", sep="\t", header=None)
-            df_sample = pd.read_csv(input_path, sep=",", header=None) #unhash if testing
+            df_sample = pd.read_csv("simplex.txt.gz", sep="\t", header=None)
+            # df_sample = pd.read_csv(input_path, sep=",", header=None) # for developer: unhash if testing
 
             ideal_chunk_size = est_chunk_size(df_sample)
             chunk_id = 1
-            # for chunk in pd.read_csv('simplex.txt.gz', chunksize=ideal_chunk_size, sep='\t', header=None, names=['read_id','seq']):
-            for chunk in pd.read_csv(input_path, chunksize=ideal_chunk_size, sep=',', header=None, names=['read_id','seq']): #unhash if testing
+            for chunk in pd.read_csv('simplex.txt.gz', chunksize=ideal_chunk_size, sep='\t', header=None, names=['read_id','seq']):
+            # for chunk in pd.read_csv(input_path, chunksize=ideal_chunk_size, sep=',', header=None, names=['read_id','seq']): # for developer: unhash if testing
                 log(f"Chunk {chunk_id} processed")
                 chunk_id += 1
             
@@ -88,21 +88,21 @@ def bsc(
                 df_counts_list.append(df_counts)
             
         elif read_type == "duplex":
-            # log('Running Dorado basecalling in duplex mode...')
-            # subprocess.run(f"dorado duplex sup {input_path} > duplex.bam", shell=True, check=True)
-            # subprocess.run(
-            #     "samtools view -F2304 duplex.bam | "
-            #     "awk '/dx:i:1/ || /dx:i:0/ {print $1 \"\\t\" $10}' | "
-            #     "gzip > duplex.txt.gz", shell=True, check=True)
+            log('Running Dorado basecalling in duplex mode...')
+            subprocess.run(f"dorado duplex sup {input_path} > duplex.bam", shell=True, check=True)
+            subprocess.run(
+                "samtools view -F2304 duplex.bam | "
+                "awk '/dx:i:1/ || /dx:i:0/ {print $1 \"\\t\" $10}' | "
+                "gzip > duplex.txt.gz", shell=True, check=True)
 
-            # df_sample = pd.read_csv("duplex.txt.gz", sep="\t", header=None)
-            df_sample = pd.read_csv(input_path, sep=",", header=None) #unhash if testing
+            df_sample = pd.read_csv("duplex.txt.gz", sep="\t", header=None)
+            # df_sample = pd.read_csv(input_path, sep=",", header=None) # for developer: unhash if testing
             
             ideal_chunk_size = est_chunk_size(df_sample)
             chunk_id = 1
 
-            # for chunk in pd.read_csv('duplex.txt.gz', chunksize=ideal_chunk_size, sep='\t', header=None, names=['read_id','seq']):
-            for chunk in pd.read_csv(input_path, chunksize=ideal_chunk_size, sep=',', header=None, names=['read_id','seq']): #unhash if testing
+            for chunk in pd.read_csv('duplex.txt.gz', chunksize=ideal_chunk_size, sep='\t', header=None, names=['read_id','seq']):
+            # for chunk in pd.read_csv(input_path, chunksize=ideal_chunk_size, sep=',', header=None, names=['read_id','seq']): # for developer: unhash if testing
 
                 log(f"Chunk {chunk_id} processed")
                 chunk_id += 1
@@ -132,25 +132,25 @@ def bsc(
     # If input is short read, this command will be executed.
     elif sequencing_type == "illumina":
 
-        # subprocess.run(
-        #     f"""zcat {input_path} |
-        #     awk 'NR%4==1 {{id=$1; sub(/^@/, "", id)}} 
-        #          NR%4==2 {{print id "\\t" $0}}' | 
-        #     gzip > reads.txt.gz""", shell=True, check=True)
+        subprocess.run(
+            f"""zcat {input_path} |
+            awk 'NR%4==1 {{id=$1; sub(/^@/, "", id)}} 
+                 NR%4==2 {{print id "\\t" $0}}' | 
+            gzip > reads.txt.gz""", shell=True, check=True)
         
         df_results = []
         df_counts_list = []
 
         log("Loading input file by chunk")
         
-        # df_sample = pd.read_csv("reads.txt.gz", sep="\t", header=None)
-        df_sample = pd.read_csv(input_path, sep=",", header=None) #unhash if testing
+        df_sample = pd.read_csv("reads.txt.gz", sep="\t", header=None)
+        # df_sample = pd.read_csv(input_path, sep=",", header=None) # for developer: unhash if testing
 
         ideal_chunk_size = est_chunk_size(df_sample)
         
         chunk_id = 1
-        # for chunk in pd.read_csv("reads.txt.gz", chunksize=ideal_chunk_size, sep='\t', header=None, names=['read_id','seq']):
-        for chunk in pd.read_csv(input_path, chunksize=ideal_chunk_size, sep=',', header=None, names=['read_id','seq']): #unhash if testing.
+        for chunk in pd.read_csv("reads.txt.gz", chunksize=ideal_chunk_size, sep='\t', header=None, names=['read_id','seq']):
+        # for chunk in pd.read_csv(input_path, chunksize=ideal_chunk_size, sep=',', header=None, names=['read_id','seq']): # for developer: unhash if testing
             log(f"Chunk {chunk_id} processed")
             chunk_id += 1
             
@@ -185,4 +185,3 @@ def bsc(
     
     log(f"Processed {total_reads:,} reads in {runtime:.2f}s")
     log(f"Speed: {total_reads/runtime:,.0f} reads/sec")
-
