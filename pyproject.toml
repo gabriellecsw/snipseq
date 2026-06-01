@@ -1,0 +1,56 @@
+[build-system]
+requires = ["hatchling>=1.24"]
+build-backend = "hatchling.build"
+
+[project]
+name = "snipseq"
+# Use dynamic version from src/snipseq/__init__.py
+dynamic = ["version"]
+description = "A CLI to demultiplex sequencing reads by barcode pairs (Illumina & Nanopore)."
+readme = {file = "README.md" ,content-type = "text/markdown"}
+requires-python = ">=3.9"
+license = { text = "MIT" }
+authors = [
+  { name = "Gabrielle Shiao Wei Chieng" , email = "gabrielle.chieng@postgrad.otago.ac.nz"}
+]
+maintainers = [
+  { name = "Gabrielle Shiao Wei Chieng" , email = "gabrielle.chieng@postgrad.otago.ac.nz"}
+]
+keywords = ["bioinformatics", "demultiplexing", "nanopore", "illumina", "barcodes"]
+classifiers = [
+  "Development Status :: 3 - Alpha",
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3 :: Only",
+  "License :: OSI Approved :: MIT License",
+  "Operating System :: OS Independent",
+  "Environment :: Console"
+]
+
+dependencies = [
+  "typer>=0.9.0",
+  "pandas>=2.0",
+  "numpy>=1.23",
+  "regex>=2022.0.0",
+  "biopython>=1.80",
+]
+
+[project.urls]
+Homepage = "https://github.com/gabriellecsw/snipseq"
+Issues = "https://github.com/gabriellecsw/snipseq/issues"
+
+[project.scripts]
+snipseq = "snipseq.cli:app"
+
+[tool.hatch.version]
+path = "src/snipseq/__init__.py"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/snipseq"] #select specific relative paths to directories or files.
+
+[tool.hatch.build.targets.sdist] #select exactly which files will be shipped in each build
+include = [
+  "src/snipseq",
+  "README.md",
+  "LICENSE",
+  "pyproject.toml",
+]
