@@ -50,13 +50,11 @@ snipseq
 -o SRR30861029_2_ss_assign_ret.csv # Your output directory.
 ```
 
-Note: If the sequencing type is `nanopore`, the `read_type` parameter must be specified. Users can choose either `simplex` or `duplex`.
+**Note**: If the sequencing type is `nanopore`, the `read_type` parameter must be specified. Users can choose either `simplex` or `duplex`.
 
 #### Demultiplex and retrieve sequence of interest
 When running the basic mode with `-ret True`, there are several options to choose from depending on the postion of your sequence of interest:
 ![overview](figures/snipseq_positions_options.png)
-
-Note that if you are using P1, P4 and P6, you must specify the spacing accordingly using the `sp` parameter. 
 
 Below is an example to run snipseq on the basic mode with `ret True`:
 
@@ -71,6 +69,8 @@ snipseq
 -sp 0 # See notes above for sp.
 -o SRR30861029_2_ss_assign_ret.csv # Your output directory
 ```
+
+**Note**: If you are using P1, P4 and P6, you must specify the spacing accordingly using the `sp` parameter. 
 
 ### Advance mode
 The `advanced` mode is intended for more complex experiments involving multiple features or more elaborate read architectures.
@@ -88,7 +88,7 @@ snipseq
 -o SRR30861029_2_ss_assign_ret.csv # Output directory
 ```
 
-## OUTPUTS
+## OUTPUT FILES
 Snipseq generates three primary output files:
 - The `main_output.csv` file contains the read identifiers and their corresponding barcode assignments.
 - The `counts_summary.csv` file summarises the number of reads assigned to each barcode pair, allowing users to quickly evaluate barcode distribution.
