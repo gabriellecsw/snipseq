@@ -47,7 +47,7 @@ snipseq bsc
 -m metadata_ime.csv # A metadata file containing your paired barcode sequences.
 -s illumina # The sequencing platform used.
 -ret False # Whether to retrieve sequence of interest. The default is False, if True, please refer to next subsection of the basic mode for more information.
--o SRR30861029_2_ss_assign_ret.csv # Your output directory.
+-o SRR30861029_2_ss_assign_ret.csv # Your output path.
 ```
 
 **Note**: If the sequencing type is `nanopore`, the `read_type` parameter must be specified. Users can choose either `simplex` or `duplex`.
@@ -67,7 +67,7 @@ snipseq bsc
 -p P4 # The position of your sequence of interest on your sequenced fragement.
 -fl 18 # The length of your sequence of interest.
 -sp 0 # See notes above for sp.
--o SRR30861029_2_ss_assign_ret.csv # Your output directory
+-o SRR30861029_2_ss_assign_ret.csv # Your output path.
 ```
 
 **Note**: If you are using P1, P4 and P6, you must specify the spacing accordingly using the `sp` parameter. 
@@ -78,14 +78,15 @@ The `advanced` mode is intended for more complex experiments involving multiple 
 In this mode, `Snipseq` automatically performs both demultiplexing and sequence retrieval.
 
 #### Preparing the `.toml` arrangement file
-This `.toml` arrangement file contains the arrangement of specific features within the read structure. Refer to [Figure(B)](#HOW-TO-START) on how to prepare a `.toml` arrangement file.
+This `.toml` arrangement file contains the arrangement of specific features within the read structure. Refer to [Figure (B)](#HOW-TO-START) on how to prepare a `.toml` arrangement file.
 
 ```r
 snipseq adv
--i SRR30861029_2.fastq.gz # Your sample file that requires demultiplexing
+-i duplex.fastq.gz # Your sample file that requires demultiplexing
 -a arrangement.toml # A .toml file containing the arrangement of features you would like to extract
--s illumina # The sequencing platform used.
--o SRR30861029_2_ss_assign_ret.csv # Output directory
+-s nanopore # The sequencing platform used.
+-r duplex # Only required if using nanopore.
+-o duplex_snipseq_adv_mode.csv # Output path.
 ```
 
 ## OUTPUT FILES
