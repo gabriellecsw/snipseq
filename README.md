@@ -9,7 +9,7 @@
 
 Snipseq is designed to remain accessible even to users with limited bioinformatics experience. At its simplest, only the sequencing reads and a metadata file describing the barcode pairs are required.
 
-![overview](figures/c6_ss_overview.png)
+![overview](figures/snipseq_pipeline.png)
 
 ## INSTALLATION
 ```r
@@ -31,7 +31,7 @@ To accommodate different experimental designs and analysis goals, Snipseq provid
 
 Both modes support demultiplexing and sequence retrieval, allowing users to choose the level of complexity appropriate for their experiment.
 
-![modes](figures/snipseq_basic_adv.png)
+![modes](figures/snipseq_example_usages.png)
 
 ### Basic mode
 The `basic` mode is designed for simple experimental setups involving a single feature of interest.
@@ -54,7 +54,7 @@ snipseq bsc
 
 #### Demultiplex and retrieve sequence of interest
 When running the basic mode with `-ret True`, there are several options to choose from depending on the postion of your sequence of interest:
-![overview](figures/snipseq_positions_options.png)
+![overview](figures/snipseq_bsc_position_options.png)
 
 Below is an example to run snipseq on the basic mode with `-ret True`:
 
