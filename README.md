@@ -3,9 +3,9 @@
 ## Key Features
 - Flexible Barcode Usage: Accepts user-defined barcode pairs, enabling researchers to repurpose barcodes already available in the lab.
 - Compatible with Various Sequencing Services (e.g., Plasmidsaurus) and Platforms: Eliminating the need for custom library prep kits. 
-- Mapping, Target Sequence Extraction and Adaptor Trimming: Reduce the need for separate preprocessing steps. 
+- Mapping and Target Sequence Extraction: Reduce the need for separate preprocessing steps. 
 - Cost-Efficiency: Enables multiplexing of replicates and conditions, allowing pooled sequencing of multiple samples in one run. Users are able to then link each read to its experimental condition via barcode mapping.
-- Flexible input files: Accepts `fastq` and `pod5` files as input.
+- Flexible Input Files: Accepts `fastq` and `pod5` files as input.
 
 Snipseq is designed to remain accessible even to users with limited bioinformatics experience. At its simplest, only the sequencing reads and a metadata file describing the barcode pairs are required.
 
@@ -39,10 +39,10 @@ The `basic` mode is designed for simple experimental setups involving a single f
 In this mode, users may perform demultiplexing alone or demultiplexing with feature sequence retrieval using the `-ret` argument (`False` for demultiplexing only and `True` to demultiplex and retrieve the feature sequence). 
 
 #### Demultiplex only
-Below is the example to run snipseq on the basic mode with `ret False`:
+Below is the example to run snipseq on the basic mode with `-ret False`:
 
 ```r
-snipseq 
+snipseq bsc
 -i SRR30861029_2.fastq.gz # Your sample file that requires demultiplexing.
 -m metadata_ime.csv # A metadata file containing your paired barcode sequences.
 -s illumina # The sequencing platform used.
@@ -56,10 +56,10 @@ snipseq
 When running the basic mode with `-ret True`, there are several options to choose from depending on the postion of your sequence of interest:
 ![overview](figures/snipseq_positions_options.png)
 
-Below is an example to run snipseq on the basic mode with `ret True`:
+Below is an example to run snipseq on the basic mode with `-ret True`:
 
 ```r
-snipseq 
+snipseq bsc
 -i SRR30861029_2.fastq.gz # Your sample file that requires demultiplexing.
 -m metadata_ime.csv # A metadata file containing your paired barcode sequences.
 -s illumina # The sequencing platform used.
@@ -81,7 +81,7 @@ In this mode, `Snipseq` automatically performs both demultiplexing and sequence 
 This `.toml` arrangement file contains the arrangement of specific fewith the read structure and feature locations specified in a .
 
 ```r
-snipseq 
+snipseq adv
 -i SRR30861029_2.fastq.gz # Your sample file that requires demultiplexing
 -a arrangement.toml # A .toml file containing the arrangement of features you would like to extract
 -s illumina # The sequencing platform used.
