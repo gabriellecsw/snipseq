@@ -78,7 +78,7 @@ The `advanced` mode is intended for more complex experiments involving multiple 
 In this mode, `Snipseq` automatically performs both demultiplexing and sequence retrieval.
 
 #### Preparing the `.toml` arrangement file
-This `.toml` arrangement file contains the arrangement of specific fewith the read structure and feature locations specified in a .
+This `.toml` arrangement file contains the arrangement of specific features within the read structure. Refer to [Figure(B)](#HOW-TO-START) on how to prepare a `.toml` arrangement file.
 
 ```r
 snipseq adv
